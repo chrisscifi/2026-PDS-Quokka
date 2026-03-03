@@ -21,15 +21,16 @@ The file hierarchy of your hand-in repo should be as follows:
 ```
 ProjectInDataScience2026_ExamTemplate/
 ├── data/
-│   ├─ features.csv         # all image file names, ground-truth labels, and chosen features
+│   ├─ features.csv                     # all image file names, ground-truth labels, and chosen features
+│   ├─ annotations_combined.csv         # annotations of hair and penmarks
 │   │
-│   ├── imgs/               # skin images (to not add on GitHub)
+│   ├── imgs/                           # skin images (to not add on GitHub)
 │   │    ├── img_XX1.png
 │   │    ├── img_XX2.png
 │   │     ......
 │   │    └── img_XXX.png
 │   │
-│   └── masks/              # masks images (to not add on GitHub)
+│   └── masks/                          # masks images (to not add on GitHub)
 │        ├── mask_XX1.png
 │        ├── mask_XX2.png
 │         ......
@@ -37,20 +38,20 @@ ProjectInDataScience2026_ExamTemplate/
 │
 ├── src/
 │   ├── __init__.py
-│   ├── feature_A.py    # code for feature A extraction
-│   ├── feature_B.py    # code for feature B extraction
+│   ├── feature_A.py                    # code for feature A extraction
+│   ├── feature_B.py                    # code for feature B extraction
 │   ......
-│   └── feature_X.py    # code for feature X extraction
+│   └── feature_X.py                    # code for feature X extraction
 │ 
 ├── result/
-│   ├── figures/        # Figures used in your report
-│   ├── models/         # Trained models
-│   ├── predictions/    # Probabilities outputed by the models
-│   └── reports         # Files related to the Mandatory assignment
+│   ├── figures/                        # Figures used in your report
+│   ├── models/                         # Trained models
+│   ├── predictions/                    # Probabilities outputed by the models
+│   └── reports                         # Files related to the Mandatory assignment
 │        ├── report_GROUPEID.pdf
 │        └── features_GROUPEID.csv
 │ 
-├── main.py             # script to train or evaluate models
+├── main.py                             # script to train or evaluate models
 └── README.md
 ```
 
