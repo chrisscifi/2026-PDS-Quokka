@@ -3,6 +3,7 @@ import skimage as ski
 import mahotas
 import numpy as np
 import os
+from feature_B import compactness_calc
 
 from color_features import extract_color_features
 
@@ -58,12 +59,7 @@ for i in range(len(imgID)):
         mask = mask > 0.5
 
     #compactness
-    area = mask.sum()
-    if area == 0:
-        compactnesses.append(np.nan)
-        continue
-    perimeter = area - ski.morphology.erosion(mask,ski.morphology.disk(3)).sum()  # erosion can be refined to be even finer
-    compactness = perimeter**2 / (area * 12)
+    compactness = compactness_calc(mask)
     compactnesses.append(compactness)
     
     feature_record = extract_color_features(img, mask)
