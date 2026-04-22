@@ -3,7 +3,7 @@ import skimage as ski
 import mahotas
 import numpy as np
 import os
-from feature_C import compactness_calc
+from feature_B import compactness_calc
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -65,7 +65,6 @@ for i in range(len(imgID)):
 # Add to dataframe
 df["compactness"] = compactnesses
 
-print(compactness)
 #save as feature extracted CSV
 PATH = os.path.join(ROOT, "data", "features.csv")
 df.to_csv(PATH)
