@@ -5,7 +5,7 @@ import numpy as np
 import os
 from feature_B import compactness_calc
 
-from color_features import extract_color_features
+from feature_C import extract_color_features
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
