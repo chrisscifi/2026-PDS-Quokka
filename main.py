@@ -1,4 +1,6 @@
 from src.split_data import split_data
+import src.model_suite
+import pandas as pd
 
 def main(features_path, prediction_results_path, model_path, load_model):
     """
@@ -14,26 +16,29 @@ def main(features_path, prediction_results_path, model_path, load_model):
 
     # split the dataset into training and testing sets.
     train_df, val_df, test_df = split_data(csv_path=features_path, train_pct=0.7, val_pct=0.15, seed=42)
+    
     if load_model:
         # load the model
-        pass
+        model = src.model_suite.load_model(model_path)
+
     else:
         # train the classifier (using logistic regression as an example)
-
         # save the model.
-        pass
+        src.model_suite.train_classifier(train_df, val_df, model_path=model_path)
+        # load the model
+        model = src.model_suite.load_model(model_path)
 
-    # test the classifier.
+    # test the classifier and write test results to CSV.
+    src.model_suite.test_model(model, test_df, prediction_results_path)
 
-
-    # write test results to CSV.
+    
 
 
 
 if __name__ == "__main__":
     features_path = "./data/features.csv"
     prediction_results_path = "./result/predictions/predictions_MODEL.csv"
-    model_path = "./result/predictions/predictions_MODEL.csv"
+    model_path = "./result/models/model.pkl"
     load_model = False
 
     main(features_path, prediction_results_path,model_path,load_model)
