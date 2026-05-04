@@ -1,14 +1,13 @@
 import numpy as np
-from PIL import Image
+import skimage as ski
 from scipy.ndimage import label
 import os
 
 
-#1. Load image 
+#1. Load image
 def load_mask(path):
-    img = Image.open(path).convert("L")
-    mask = np.array(img)
-    mask = (mask > 0).astype(np.uint8)  
+    img = ski.io.imread(path, as_gray=True)
+    mask = (img > 0).astype(np.uint8)
     return mask
 
 
@@ -67,11 +66,16 @@ def asymmetry(A, B):
     return diff.sum() / (A.sum() + B.sum() + 1e-8)
 
 
-#7. Main function 
-def compute_asymmetry(path):
-    mask = load_mask(path)
+#7. Main function
+def compute_asymmetry(mask):
+    FEATURE_NAMES = ['horizontal_asymmetry', 'vertical_asymmetry', 'combined_asymmetry']
+
+    mask = (np.asarray(mask) > 0).astype(np.uint8)
     mask = largest_component(mask)
     mask = crop_to_object(mask)
+
+    if mask.sum() == 0:
+        return {k: np.nan for k in FEATURE_NAMES}
 
     left, right, top, bottom = split_mask(mask)
 
@@ -87,24 +91,26 @@ def compute_asymmetry(path):
     h = asymmetry(left, right)
     v = asymmetry(top, bottom)
 
-    return {
-        "horizontal": float(h),
-        "vertical": float(v),
-        "combined": float((h + v) / 2)
-    }
+    features = {}
+    features['horizontal_asymmetry'] = float(h)
+    features['vertical_asymmetry'] = float(v)
+    features['combined_asymmetry'] = float((h + v) / 2)
 
-folder = "data/masks"
+    return features
 
-for filename in os.listdir(folder):
-    if filename.endswith(".png"):
-        path = os.path.join(folder, filename)
+if __name__ == "__main__":
+    folder = "data/masks"
 
-        try:
-            res = compute_asymmetry(path)
+    for filename in os.listdir(folder):
+        if filename.endswith(".png"):
+            path = os.path.join(folder, filename)
 
-            print(f"{filename} -> H: {res['horizontal']:.3f}, "
-                  f"V: {res['vertical']:.3f}, "
-                  f"C: {res['combined']:.3f}")
+            try:
+                res = compute_asymmetry(load_mask(path))
 
-        except Exception as e:
-            print(f"Nope {filename}: {e}")
+                print(f"{filename} -> H: {res['horizontal_asymmetry']:.3f}, "
+                      f"V: {res['vertical_asymmetry']:.3f}, "
+                      f"C: {res['combined_asymmetry']:.3f}")
+
+            except Exception as e:
+                print(f"Nope {filename}: {e}")

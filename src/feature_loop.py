@@ -3,6 +3,7 @@ import skimage as ski
 import mahotas
 import numpy as np
 import os
+from feature_A import compute_asymmetry
 from feature_B import border_calc
 from feature_C import extract_color_features
 
@@ -34,6 +35,7 @@ mask_dir = os.path.join(ROOT, "data", "masks")
 
 imgID = df["img_id"].to_list()
 diagnosis = df["diagnostic"].to_list()
+asymmetry_features = []
 border_features = []
 color_features = []
 
@@ -62,6 +64,9 @@ for i in range(len(imgID)):
     else:
         mask = mask > 0.5
 
+    #asymmetry features
+    asymmetry_features.append(compute_asymmetry(mask))
+
     #border features
     border_features.append(border_calc(mask))
 
@@ -69,9 +74,10 @@ for i in range(len(imgID)):
     color_features.append(extract_color_features(img, mask))
 
 # Add to dataframe
+asymmetry_df = pd.DataFrame(asymmetry_features)
 border_df = pd.DataFrame(border_features)
 color_df = pd.DataFrame(color_features)
-df = pd.concat([df, border_df, color_df], axis=1)
+df = pd.concat([df, asymmetry_df, border_df, color_df], axis=1)
 
 #save as feature extracted CSV
 PATH = os.path.join(ROOT, "data", "features.csv")
